@@ -1,0 +1,50 @@
+.SELF{
+  height: 100%;
+  .user-info{
+    position: relative;
+    height: 80px;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    color: #696969;
+
+    .header-img{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    h3{
+      margin: 0;
+      position: absolute;
+      top:15px;
+      left:30px;
+    }
+    p{
+      position: absolute;
+      top:35px;
+      left:30px;
+      font-size: 12px;
+    };
+  }
+  .user-content{
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .nav-bar{
+      width: 200px;
+      height: 100%;
+      border-right: 1px solid #ddd;
+    }
+    .user-panel{
+      position: absolute;
+      left: 200px;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      overflow: auto;
+      padding: 30px;
+    }
+  }
+}

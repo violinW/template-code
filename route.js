@@ -1,3 +1,4 @@
+
 /*****************************************************************
  * 青岛雨人软件有限公司©2016版权所有
  *
@@ -7,7 +8,18 @@
  * 公布本软件的任何部分。青岛雨人软件有限公司保留对任何违反本声明
  * 的组织和个人采取法律手段维护合法权益的权利。
  *****************************************************************/
-var ReactDom = require('react-dom');
-const Routes = require('./route');
+import 'Sass/common.scss';
+import React from 'react';
+import { Router, Route, IndexRoute, Redirect, hashHistory } from 'react-router';
+//登录
+import Login from 'Component/pageUI/login/login'
+//个人中心
+import Self from 'Component/pageUI/self/self'
 
-ReactDom.render(Routes, document.getElementById("app"));
+
+module.exports = (
+    <Router history={hashHistory}>
+        <Route path='/login' component={Login} />
+    <Route path='/self' component={Self} />
+    </Router>
+);

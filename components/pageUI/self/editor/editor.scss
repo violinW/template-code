@@ -1,0 +1,29 @@
+.EDITOR{
+  .ReactCodeMirror{
+    border: 1px solid #ddd;
+  }
+  .edit-area{
+    margin-bottom: 15px;
+    #params-area{
+      display: inline-block;
+      width: 37%;
+      margin-right: 2%;
+      vertical-align: top;
+    }
+    #template-area{
+      display: inline-block;
+      height: 300px;
+      width: 55%;
+      vertical-align: top;
+    }
+  }
+  .display-area{
+    height: 400px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+  }
+  .code-area{
+    height: 400px;
+    border: 1px solid #ddd;
+  }
+}

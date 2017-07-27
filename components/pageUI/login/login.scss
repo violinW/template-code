@@ -1,0 +1,37 @@
+.LOGIN{
+  height: 100%;
+  .background-img{
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+  }
+  .login-block{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -150px;
+    margin-top: -100px;
+    display: inline-block;
+    padding: 70px 30px 30px 20px;
+    background-color: rgba(225, 253, 202, 0.7);
+    border: 1px solid #ff9235;
+    width: 300px;
+    box-shadow: 0px 0px 15px 4px #6b6b6b;
+
+
+    .login-row{
+      width:100%;
+      margin-bottom: 15px;
+
+      span {
+        display: inline-block;
+        width: 80px;
+        text-align: right;
+        margin-right: 10px;
+      }
+      input{
+        background: rgba(232, 232, 232, 0.5);
+      }
+    }
+  }
+}
