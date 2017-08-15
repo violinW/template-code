@@ -77,6 +77,11 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="EDITOR">
+                <div>
+                    <span className="title title-params">参数：</span>
+                    <span className="title title-template">模板：</span>
+                    <span className="title title-css">样式（css）：</span>
+                </div>
                 <div className="edit-area">
                     <div id="params-area"></div>
                     <div id="template-area"></div>

@@ -2,6 +2,22 @@
   .ReactCodeMirror{
     border: 1px solid #ddd;
   }
+  .title{
+    display: inline-block;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  .title-params{
+    width: 23%;
+    margin-right: 2%;
+  }
+  .title-template{
+    width:50%;
+    margin-right: 2%;
+  }
+  .title-css{
+      width: 23%;
+    }
   .edit-area{
     margin-bottom: 15px;
     #params-area{
