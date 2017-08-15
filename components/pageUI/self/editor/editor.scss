@@ -6,14 +6,21 @@
     margin-bottom: 15px;
     #params-area{
       display: inline-block;
-      width: 37%;
+      width: 23%;
       margin-right: 2%;
       vertical-align: top;
     }
     #template-area{
       display: inline-block;
       height: 300px;
-      width: 55%;
+      width: 50%;
+      margin-right: 2%;
+      vertical-align: top;
+    }
+    #css-area{
+      display: inline-block;
+      height: 300px;
+      width: 23%;
       vertical-align: top;
     }
   }
