@@ -8,12 +8,15 @@ import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/css/css';
 import 'codemirror/lib/codemirror.css';
 import './editor.scss';
+import reactTools from 'react-tools';
+import Mustache from 'mustache';
+import YAML from 'yamljs';
 
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            code: '#请配置参数',
+            params: '#请配置参数',
             template: '模板',
             css: ''
         };
@@ -26,9 +29,9 @@ export default class Login extends React.Component {
         setTimeout(()=>this.newCssArea(), 300);
     }
 
-    updateCode = (newCode)=> {
+    updateCode = (newParams)=> {
         this.setState({
-            code: newCode
+            params: newParams
         });
     };
 
@@ -50,7 +53,7 @@ export default class Login extends React.Component {
             mode: 'yaml',
             smartIndent: false
         };
-        ReactDom.render(<CodeMirror value={this.state.code} onChange={this.updateCode} options={paramsOptions} />,
+        ReactDom.render(<CodeMirror value={this.state.params} onChange={this.updateCode} options={paramsOptions} />,
             $('#params-area')[0]);
     };
 
@@ -73,7 +76,20 @@ export default class Login extends React.Component {
         ReactDom.render(<CodeMirror value={this.state.css} onChange={this.updateCss} options={cssOptions} />,
           $('#css-area')[0]);
     };
-
+    generateResult = ()=> {
+        let paramsJSON = YAML.parse(this.state.params);
+        let mustacheCode = Mustache.render(this.state.template, paramsJSON);
+        let dealedCode = reactTools.transform(mustacheCode, {harmony: true});
+        debugger
+        var iwindow = document.getElementsByTagName('iframe')[0].contentWindow;
+        var idocument = $('iframe').prop('contentDocument');
+        var injected_script = '(function(){'+dealedCode+'})()';
+        var el = idocument.createElement('script');
+        el.text = injected_script;
+        idocument.head.appendChild($('<script src="http://cdn.bootcss.com/react/15.3.2/react.js"></script>')[0]);
+        idocument.body.appendChild($('<div id="content"></div>')[0]);
+        idocument.body.appendChild(el);
+    }
     render() {
         return (
             <div className="EDITOR">
@@ -87,11 +103,22 @@ export default class Login extends React.Component {
                     <div id="template-area"></div>
                     <div id="css-area"></div>
                 </div>
-                <Button>
+                <Button onClick={this.generateResult}>
                     测试
                 </Button>
-                <div className="display-area"></div>
-                <div className="code-area"></div>
+                <Button>
+                    保存成草稿
+                </Button>
+                <Button>
+                    保存为我的作品
+                </Button>
+                <Button>
+                    发布
+                </Button>
+                <div id="display-area">
+                    <iframe id="dispFrame" />
+                </div>
+                <div id="code-area"></div>
             </div>
         );
     }
