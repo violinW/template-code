@@ -9,9 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "antd": "=2.12.7",
+    "codemirror": "=5.20.2",
     "react-codemirror": "=1.0.0",
-    "react-mustache": "=0.1.5",
-    "codemirror": "=5.20.2"
+    "react-mustache": "=0.1.5"
   },
   "devDependencies": {
     "autoprefixer-loader": "=3.2.0",

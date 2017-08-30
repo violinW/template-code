@@ -9,5 +9,6 @@
  *****************************************************************/
 var ReactDom = require('react-dom');
 const Routes = require('./route');
+import 'antd/dist/antd.css';
 
 ReactDom.render(Routes, document.getElementById("app"));

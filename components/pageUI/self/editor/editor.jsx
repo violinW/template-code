@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Input, Button} from 'antd';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
@@ -11,14 +10,19 @@ import './editor.scss';
 import reactTools from 'react-tools';
 import Mustache from 'mustache';
 import YAML from 'yamljs';
+import selfAction from 'Action/self.js';
+import {Modal, Button, Input} from 'antd';
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: '',
       params: '',
       template: '',
-      css: ''
+      css: '',
+      visible: false,
+      save_type: ''
     };
   }
 
@@ -129,7 +133,31 @@ export default class Login extends React.Component {
   };
 
   saveAsDraft = ()=> {
-    
+    this.setState({
+      visible: true,
+      save_type: 'draft'
+    })
+  };
+
+  handleOk = ()=> {
+    if(this.state.save_type === "draft"){
+      selfAction.saveAsDraft({
+        name: this.state.name,
+        params: this.state.params,
+        css: this.state.css,
+        template: this.state.template
+      }, ()=>{
+        this.handleCancel();
+      })
+
+    }
+  };
+
+  handleCancel = ()=> {
+    this.setState({
+      visible: true
+    })
+
   };
 
   render() {
@@ -157,6 +185,14 @@ export default class Login extends React.Component {
           <div id="display-area">
           </div>
           <div id="code-area"></div>
+          <Modal
+              title="请填写标题"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+          >
+            <Input value=""/>
+          </Modal>
         </div>
     );
   }

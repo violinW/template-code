@@ -64,7 +64,8 @@ var config = {
             'Action': __dirname + '/actions',
             'Store': __dirname + '/stores',
             'Sass': __dirname + '/sass',
-            'Images': __dirname + '/images/index.js'
+            'Images': __dirname + '/images/index.js',
+            'Modules': __dirname + '/modules'
         },
         //后缀自动补全功能
         extensions: ['.js', '.jsx', '.json', '.css', '.scss', '.less', '.png', '.jpg']
