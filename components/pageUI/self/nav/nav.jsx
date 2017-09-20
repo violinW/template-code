@@ -6,45 +6,62 @@ import 'codemirror/lib/codemirror.css';
 import './nav.scss';
 import {hashHistory} from 'react-router';
 import NavBasic from 'Component/basicUI/nav/nav';
+import selfAction from 'Action/self.js';
+import selfStore from 'Store/self';
 
 export default class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navList: [
-        {
-          icon: 'fa fa-user-o',
-          name: "个人信息",
-          src: "/self/info",
-          children: []
-        }, {
-          icon: 'fa fa-bookmark-o',
-          name: "我的作品",
-          src: "/self/work",
-          children: [{
-            name: "作品1",
-            src: "/self/work/one",
-          }]
-        }, {
-          icon: 'fa fa-binoculars',
-          name: "我的草稿",
-          src: "/self/draft",
-          children: [{
-            name: "作品1",
-            src: "/self/draft/one",
-          }]
-        }
-      ]
+      draftList: []
     };
   }
 
   componentDidMount() {
-    //生成默认参数
+    selfStore.addChangeListener(this.update);
+    selfAction.getDraftList();
+  }
+
+  componentWillUnmount() {
+    selfStore.removeChangeListener(this.update);
+  }
+
+  update = () => {
+    const draftList = selfStore.getDraftList() || [];
+    this.setState({
+      draftList: _.map(draftList, (draft)=> {
+        return {
+          name: draft.name,
+          src: "/self/draft/" + draft.GUID,
+        }
+      })
+    });
   }
 
   render() {
+    let navList = [
+      {
+        icon: 'fa fa-user-o',
+        name: "个人信息",
+        src: "/self/info",
+        children: []
+      }, {
+        icon: 'fa fa-bookmark-o',
+        name: "我的作品",
+        src: "/self/work",
+        children: [{
+          name: "作品1",
+          src: "/self/work/one",
+        }]
+      }, {
+        icon: 'fa fa-binoculars',
+        name: "我的草稿",
+        src: "/self/draft",
+        children: this.state.draftList
+      }
+    ]
     return (
-          <NavBasic navList={this.state.navList}/>
+        <NavBasic navList={navList}/>
     );
   }
 }

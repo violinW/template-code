@@ -162,7 +162,7 @@ export default class Login extends React.Component {
         params: this.state.params,
         css: this.state.css,
         template: this.state.template
-      }, ()=> {
+      }, this.props.params.id, ()=> {
         hashHistory.push('/self/info');
       })
 

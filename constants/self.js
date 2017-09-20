@@ -1,5 +1,5 @@
 const self = {
-  SELF_NAV_LIST: null
+  SELF_DRAFT_LIST: null
 };
 
 module.exports = self;

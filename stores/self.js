@@ -2,19 +2,19 @@ import Dispatcher from 'Dispatcher';
 import actionConstants from 'Constants';
 import BasicFunc from 'Store/basicStoreFunc';
 
-let selfNavList = [];
+let draftList = [];
 
 const selfStore = BasicFunc("个人中心数据", "self", {
-  getSelfNavList() {
-    return selfNavList;
+  getDraftList() {
+    return draftList;
   }
 });
 
 Dispatcher.register(function (action) {
   const data = action.data;
   switch (action.type) {
-    case actionConstants.self.SELF_NAV_LIST:
-      selfNavList = data;
+    case actionConstants.self.SELF_DRAFT_LIST:
+      draftList = data;
       break;
     default:
   }

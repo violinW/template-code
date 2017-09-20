@@ -57,15 +57,6 @@ Dispatcher.register(function(action) {
             msg = data;
             commonStore.emitEventChange("MESSAGE_EVENT");
             break;
-        // 更改弹窗数据
-        case constants.common.SET_MODAL:
-            _.each(modal, function(value, key) {
-                typeof data[key] !== "undefined"
-                    ? modal[key] = data[key]
-                    : null;
-            });
-            commonStore.emitEventChange('MODAL');
-            break;
         case constants.common.SELECT_LIST:
             selectList = data;
             commonStore.emitChange();

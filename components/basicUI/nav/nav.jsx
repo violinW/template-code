@@ -8,7 +8,6 @@ export default class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navList: this.props.navList,
       activeKey: ""
     };
   }
@@ -87,7 +86,7 @@ export default class Nav extends React.Component {
   render() {
     return (
         <ul className="NAV">
-          {this.makeList(this.state.navList)}
+          {this.makeList(this.props.navList)}
         </ul>
     );
   }

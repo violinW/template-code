@@ -28,7 +28,7 @@ import Work from 'Component/pageUI/self/work/work';
 module.exports = (
     <Router history={hashHistory}>
       <Route component={Body}>
-        <Redirect from='/' to='/login'/>
+        <Redirect from='/' to='/self'/>
         <Route path='/login' component={Login}/>
         <Route path='/forgot' component={Forgot}/>
         <Redirect from='/self' to='/self/info'/>
