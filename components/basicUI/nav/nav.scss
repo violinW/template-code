@@ -1,0 +1,60 @@
+.NAV {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 200px;
+  box-shadow: 0 2px 5px 0 rgba(239, 235, 235, 0.16), 0 2px 10px 0 rgba(72, 70, 70, 0.12);
+
+  .nav-item {
+    position: relative;
+    display: block;
+    line-height: 44px;
+
+    &.active {
+      border-left: 4px solid #918C8C;
+    }
+
+    > a {
+      padding: 10px 15px;
+      display: inline-block;
+      width: 100%;
+      line-height: 42px;
+      font-size: 16px;
+      text-decoration: none;
+      > i {
+        padding-right: 10px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 42px;
+      }
+      .text-right {
+        float: right;
+        padding-right: 10px;
+      }
+    }
+    .nav-child {
+      background-color: #F6F8F8;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      display: none;
+
+      &.active {
+        display: block;
+      }
+      .nav-child-item {
+        padding-left: 10%;
+
+        a {
+          padding: 10px 15px;
+          display: inline-block;
+          width: 100%;
+          line-height: 42px;
+          font-size: 16px;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+}

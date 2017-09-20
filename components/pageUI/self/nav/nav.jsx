@@ -1,43 +1,50 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import {Input, Button} from 'antd';
-import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/lib/codemirror.css';
 import './nav.scss';
+import {hashHistory} from 'react-router';
+import NavBasic from 'Component/basicUI/nav/nav';
 
-export default class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            myTemplate: [{
-              key: "workOne",
-              value: "作品1"
-            }, {
-                key: "workTwo",
-                value: "作品2"
-            }]
-        };
-    }
+export default class Nav extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      navList: [
+        {
+          icon: 'fa fa-user-o',
+          name: "个人信息",
+          src: "/self/info",
+          children: []
+        }, {
+          icon: 'fa fa-bookmark-o',
+          name: "我的作品",
+          src: "/self/work",
+          children: [{
+            name: "作品1",
+            src: "/self/work/one",
+          }]
+        }, {
+          icon: 'fa fa-binoculars',
+          name: "我的草稿",
+          src: "/self/draft",
+          children: [{
+            name: "作品1",
+            src: "/self/draft/one",
+          }]
+        }
+      ]
+    };
+  }
 
-    componentDidMount() {
-        //生成默认参数
-    }
+  componentDidMount() {
+    //生成默认参数
+  }
 
-    render() {
-        return (
-            <div className="NAV">
-                <p>我的作品</p>
-                <ul className="myWork">
-                    {
-                        _.map(this.state.myTemplate, (template)=>{
-                            return <li data-key={template.key}>{template.value}</li>
-                        })
-                    }
-                </ul>
-            </div>
-        );
-    }
+  render() {
+    return (
+          <NavBasic navList={this.state.navList}/>
+    );
+  }
 }

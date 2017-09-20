@@ -1,4 +1,3 @@
-
 /*****************************************************************
  * 青岛雨人软件有限公司©2016版权所有
  *
@@ -10,16 +9,34 @@
  *****************************************************************/
 import 'Sass/common.scss';
 import React from 'react';
-import { Router, Route, IndexRoute, Redirect, hashHistory } from 'react-router';
+import {Router, Route, IndexRoute, Redirect, hashHistory} from 'react-router';
 //登录
-import Login from 'Component/pageUI/login/login'
+import Login from 'Component/pageUI/login/login';
+//找回密码
+import Forgot from 'Component/pageUI/forgot/forgot';
 //个人中心
-import Self from 'Component/pageUI/self/self'
-
+import Body from 'Component/pageUI/body/body';
+//个人中心
+import Self from 'Component/pageUI/self/self';
+//个人信息
+import Info from 'Component/pageUI/self/info/info';
+//草稿箱
+import Editor from 'Component/pageUI/self/editor/editor';
+//作品
+import Work from 'Component/pageUI/self/work/work';
 
 module.exports = (
     <Router history={hashHistory}>
-        <Route path='/login' component={Login} />
-    <Route path='/self' component={Self} />
+      <Route component={Body}>
+        <Redirect from='/' to='/login'/>
+        <Route path='/login' component={Login}/>
+        <Route path='/forgot' component={Forgot}/>
+        <Redirect from='/self' to='/self/info'/>
+        <Route path='/self' component={Self}>
+          <Route path='draft/:id' component={Editor}/>
+          <Route path='work/:id' component={Work}/>
+          <Route path='info' component={Info}/>
+        </Route>
+      </Route>
     </Router>
 );

@@ -12,26 +12,35 @@ import Mustache from 'mustache';
 import YAML from 'yamljs';
 import selfAction from 'Action/self.js';
 import {Modal, Button, Input} from 'antd';
+import defaultCss from './defaultCss';
+import defaultParams from './defaultParams';
+import defaultTemplate from './defaultTemplate';
+import {hashHistory} from 'react-router';
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
-      params: '',
-      template: '',
-      css: '',
+      params: defaultParams,
+      template: defaultTemplate,
+      css: defaultCss,
       visible: false,
       save_type: ''
     };
   }
 
   componentDidMount() {
+    this.init();
+  }
+
+  init = ()=> {
     //生成默认参数
     setTimeout(()=>this.newParamsArea(), 100);
     setTimeout(()=>this.newTemplateArea(), 200);
     setTimeout(()=>this.newCssArea(), 300);
     this.generateContent();
+
   }
 
   updateCode = (newParams)=> {
@@ -58,6 +67,7 @@ export default class Login extends React.Component {
       mode: 'yaml',
       smartIndent: false
     };
+    $('#params-area').html('');
     ReactDom.render(<CodeMirror value={this.state.params} onChange={this.updateCode} options={paramsOptions}/>,
         $('#params-area')[0]);
   };
@@ -68,6 +78,7 @@ export default class Login extends React.Component {
       mode: 'javascript',
       smartIndent: false
     };
+    $('#template-area').html('');
     ReactDom.render(<CodeMirror value={this.state.template} onChange={this.updateTemplate} options={templateOptions}/>,
         $('#template-area')[0]);
   };
@@ -78,6 +89,7 @@ export default class Login extends React.Component {
       mode: 'css',
       smartIndent: false
     };
+    $('#css-area').html('');
     ReactDom.render(<CodeMirror value={this.state.css} onChange={this.updateCss} options={cssOptions}/>,
         $('#css-area')[0]);
   };
@@ -139,15 +151,19 @@ export default class Login extends React.Component {
     })
   };
 
+  saveAsWork = ()=> {
+
+  };
+
   handleOk = ()=> {
-    if(this.state.save_type === "draft"){
+    if (this.state.save_type === "draft") {
       selfAction.saveAsDraft({
         name: this.state.name,
         params: this.state.params,
         css: this.state.css,
         template: this.state.template
-      }, ()=>{
-        this.handleCancel();
+      }, ()=> {
+        hashHistory.push('/self/info');
       })
 
     }
@@ -155,9 +171,15 @@ export default class Login extends React.Component {
 
   handleCancel = ()=> {
     this.setState({
-      visible: true
+      visible: false,
+      name: ""
     })
+  };
 
+  onNameChange = (e)=> {
+    this.setState({
+      name: e.target.value
+    })
   };
 
   render() {
@@ -179,7 +201,7 @@ export default class Login extends React.Component {
           <Button onClick={this.saveAsDraft}>
             保存成草稿
           </Button>
-          <Button>
+          <Button onClick={this.saveAsWork}>
             保存为我的作品
           </Button>
           <div id="display-area">
@@ -191,7 +213,7 @@ export default class Login extends React.Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
           >
-            <Input value=""/>
+            <Input value={this.state.name} onChange={this.onNameChange}/>
           </Modal>
         </div>
     );

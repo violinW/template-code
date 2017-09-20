@@ -10,5 +10,8 @@ module.exports = {
       cookieMethods.setCookie('token', result.token);
       callback();
     })
+  },
+  findPassword(acount, callback) {
+    callback()
   }
 }

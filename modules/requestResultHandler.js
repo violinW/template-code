@@ -10,7 +10,7 @@ module.exports = function (url, method, data, successMethod, errorMethod) {
     data,
     beforeSend: function (xhr) {
       let token = cookieMethods.getCookie('token');
-      token && xhr.setRequestHeader("token", token);
+      token && xhr.setRequestHeader("authorization", token);
     },
     success: function (result, status, xhr) {
       successMethod && successMethod(result, status, xhr)

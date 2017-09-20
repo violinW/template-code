@@ -61,6 +61,8 @@ var config = {
     resolve: {
         alias: {
             'Component': __dirname + '/components',
+            'Constants': __dirname + '/constants/constants.js',
+            'Dispatcher': __dirname + '/dispatcher/dispatcher.js',
             'Action': __dirname + '/actions',
             'Store': __dirname + '/stores',
             'Sass': __dirname + '/sass',
