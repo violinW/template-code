@@ -15,10 +15,10 @@ module.exports = {
       })
     } else {
       RequestResultHandler('/draft/add', 'POST', data, function (result, status, xhr) {
-        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿成功', 'success', 'message', '')));
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '编辑草稿成功', 'success', 'message', '')));
         callback()
       }, function (xhr, status, error) {
-        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿失败', 'error', 'message', '')));
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '编辑草稿失败', 'error', 'message', '')));
       })
     }
   },
@@ -28,5 +28,37 @@ module.exports = {
     }, function (xhr, status, error) {
       Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '获取草稿列表失败', 'error', 'message', '')));
     })
+  },
+  getDraftDetail(id){
+    RequestResultHandler('/draft/userDetail/' + id, 'GET', null, function (result, status, xhr) {
+      Dispatcher.dispatch(new Action(constants.self.SELF_DRAFT_DETAIL, result));
+    }, function (xhr, status, error) {
+      Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '获取草稿详情失败', 'error', 'message', '')));
+    })
+  },
+  getMyWorksList(){
+    RequestResultHandler('/works/myWorks/list', 'GET', null, function (result, status, xhr) {
+      Dispatcher.dispatch(new Action(constants.self.SELF_MY_WORKS_LIST, result));
+    }, function (xhr, status, error) {
+      Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '获取我的作品列表失败', 'error', 'message', '')));
+    })
+
+  },
+  saveMyWork(data, id, callback){
+    if (id) {
+      RequestResultHandler('/works/edit/' + id, 'POST', data, function (result, status, xhr) {
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿成功', 'success', 'message', '')));
+        callback()
+      }, function (xhr, status, error) {
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿失败', 'error', 'message', '')));
+      })
+    } else {
+      RequestResultHandler('/works/add', 'POST', data, function (result, status, xhr) {
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '编辑草稿成功', 'success', 'message', '')));
+        callback()
+      }, function (xhr, status, error) {
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '编辑草稿失败', 'error', 'message', '')));
+      })
+    }
   }
 }

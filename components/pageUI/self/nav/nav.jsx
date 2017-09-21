@@ -13,13 +13,15 @@ export default class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      draftList: []
+      draftList: [],
+      myWorksList: []
     };
   }
 
   componentDidMount() {
     selfStore.addChangeListener(this.update);
     selfAction.getDraftList();
+    selfAction.getMyWorksList();
   }
 
   componentWillUnmount() {
@@ -28,11 +30,18 @@ export default class Nav extends React.Component {
 
   update = () => {
     const draftList = selfStore.getDraftList() || [];
+    const myWorksList = selfStore.getMyWorksList() || [];
     this.setState({
       draftList: _.map(draftList, (draft)=> {
         return {
           name: draft.name,
           src: "/self/draft/" + draft.GUID,
+        }
+      }),
+      myWorksList: _.map(myWorksList, (work)=> {
+        return {
+          name: work.name,
+          src: "/self/draft/" + work.GUID,
         }
       })
     });
@@ -49,10 +58,7 @@ export default class Nav extends React.Component {
         icon: 'fa fa-bookmark-o',
         name: "我的作品",
         src: "/self/work",
-        children: [{
-          name: "作品1",
-          src: "/self/work/one",
-        }]
+        children: this.state.myWorksList
       }, {
         icon: 'fa fa-binoculars',
         name: "我的草稿",

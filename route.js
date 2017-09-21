@@ -33,7 +33,9 @@ module.exports = (
         <Route path='/forgot' component={Forgot}/>
         <Redirect from='/self' to='/self/info'/>
         <Route path='/self' component={Self}>
+          <Route path='draft' component={Editor}/>
           <Route path='draft/:id' component={Editor}/>
+          <Route path='work' component={Work}/>
           <Route path='work/:id' component={Work}/>
           <Route path='info' component={Info}/>
         </Route>

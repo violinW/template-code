@@ -11,6 +11,7 @@ import reactTools from 'react-tools';
 import Mustache from 'mustache';
 import YAML from 'yamljs';
 import selfAction from 'Action/self.js';
+import selfStore from 'Store/self';
 import {Modal, Button, Input} from 'antd';
 import defaultCss from './defaultCss';
 import defaultParams from './defaultParams';
@@ -22,16 +23,48 @@ export default class Login extends React.Component {
     super(props);
     this.state = {
       name: '',
-      params: defaultParams,
-      template: defaultTemplate,
-      css: defaultCss,
+      params: !this.props.params.id && defaultParams,
+      template: !this.props.params.id && defaultTemplate,
+      css: !this.props.params.id && defaultCss,
       visible: false,
       save_type: ''
     };
   }
 
   componentDidMount() {
+    selfStore.addChangeListener(this.update);
     this.init();
+  }
+
+  componentWillUnmount() {
+    selfStore.removeChangeListener(this.update);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.id !== nextProps.params.id) {
+      if (!this.props.params.id) {
+        this.state = {
+          params: defaultParams,
+          template: defaultTemplate,
+          css: defaultCss
+        };
+      } else {
+        selfAction.getDraftDetail(this.props.params.id);
+      }
+    }
+  }
+
+  update = () => {
+    const draftDetail = selfStore.getDraftDetail() || {};
+    this.setState({
+      name: draftDetail.name,
+      params: draftDetail.params,
+      template: draftDetail.template,
+      css: draftDetail.css,
+    });
+    setTimeout(()=>this.newParamsArea(), 100);
+    setTimeout(()=>this.newTemplateArea(), 200);
+    setTimeout(()=>this.newCssArea(), 300);
   }
 
   init = ()=> {
@@ -40,6 +73,7 @@ export default class Login extends React.Component {
     setTimeout(()=>this.newTemplateArea(), 200);
     setTimeout(()=>this.newCssArea(), 300);
     this.generateContent();
+    this.props.params.id && selfAction.getDraftDetail(this.props.params.id);
 
   }
 
@@ -152,7 +186,10 @@ export default class Login extends React.Component {
   };
 
   saveAsWork = ()=> {
-
+    this.setState({
+      visible: true,
+      save_type: 'work'
+    })
   };
 
   handleOk = ()=> {
@@ -163,9 +200,20 @@ export default class Login extends React.Component {
         css: this.state.css,
         template: this.state.template
       }, this.props.params.id, ()=> {
+        selfAction.getDraftList();
         hashHistory.push('/self/info');
       })
 
+    }else if(this.state.save_type === "work"){
+      selfAction.saveMyWork({
+        name: this.state.name,
+        params: this.state.params,
+        css: this.state.css,
+        template: this.state.template
+      }, this.props.params.id, ()=> {
+        selfAction.getMyWorksList();
+        hashHistory.push('/self/info');
+      })
     }
   };
 
