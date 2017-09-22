@@ -47,17 +47,17 @@ module.exports = {
   saveMyWork(data, id, callback){
     if (id) {
       RequestResultHandler('/works/edit/' + id, 'POST', data, function (result, status, xhr) {
-        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿成功', 'success', 'message', '')));
-        callback()
-      }, function (xhr, status, error) {
-        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿失败', 'error', 'message', '')));
-      })
-    } else {
-      RequestResultHandler('/works/add', 'POST', data, function (result, status, xhr) {
         Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '编辑草稿成功', 'success', 'message', '')));
         callback()
       }, function (xhr, status, error) {
         Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '编辑草稿失败', 'error', 'message', '')));
+      })
+    } else {
+      RequestResultHandler('/works/add', 'POST', data, function (result, status, xhr) {
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿成功', 'success', 'message', '')));
+        callback()
+      }, function (xhr, status, error) {
+        Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '新增草稿失败', 'error', 'message', '')));
       })
     }
   }
