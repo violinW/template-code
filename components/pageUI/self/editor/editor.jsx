@@ -17,8 +17,9 @@ import defaultCss from './defaultCss';
 import defaultParams from './defaultParams';
 import defaultTemplate from './defaultTemplate';
 import {hashHistory} from 'react-router';
+const confirm = Modal.confirm;
 
-export default class Login extends React.Component {
+export default class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -192,6 +193,20 @@ export default class Login extends React.Component {
     })
   };
 
+  deleteDraft = ()=> {
+    let self = this;
+    confirm({
+      title: '删除提示',
+      content: '你确定删除该草稿么?',
+      onOk() {
+        selfAction.deleteDraftById(self.props.params.id, ()=> {
+          selfAction.getDraftList();
+          hashHistory.push('/self/info');
+        });
+      }
+    });
+  };
+
   handleOk = ()=> {
     if (this.state.save_type === "draft") {
       selfAction.saveAsDraft({
@@ -251,6 +266,9 @@ export default class Login extends React.Component {
           </Button>
           <Button onClick={this.saveAsWork}>
             保存为我的作品
+          </Button>
+          <Button onClick={this.deleteDraft}>
+            删除
           </Button>
           <div id="display-area">
           </div>

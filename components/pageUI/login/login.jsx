@@ -59,7 +59,7 @@ export default class Login extends React.Component {
                         <Input placeholder="用户名" onChange={(e) => this.setField('username', e.target.value)}/>
                     </div>
                     <div className="login-row">
-                        <Input placeholder="密码" onChange={(e) => this.setField('password', e.target.value)}/>
+                        <Input placeholder="密码" type="password" onChange={(e) => this.setField('password', e.target.value)}/>
                     </div>
                     <span className="message">{this.state.message}</span>
                     <span className="forgot-pw" onClick={this.forgotPW}>忘记密码</span>

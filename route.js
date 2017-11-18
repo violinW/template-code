@@ -23,7 +23,7 @@ import Info from 'Component/pageUI/self/info/info';
 //草稿箱
 import Editor from 'Component/pageUI/self/editor/editor';
 //作品
-import Work from 'Component/pageUI/self/work/work';
+import MyWork from 'Component/pageUI/self/myWork/work';
 
 module.exports = (
     <Router history={hashHistory}>
@@ -35,8 +35,8 @@ module.exports = (
         <Route path='/self' component={Self}>
           <Route path='draft' component={Editor}/>
           <Route path='draft/:id' component={Editor}/>
-          <Route path='work' component={Work}/>
-          <Route path='work/:id' component={Work}/>
+          <Route path='myWork' component={MyWork}/>
+          <Route path='myWork/:id' component={MyWork}/>
           <Route path='info' component={Info}/>
         </Route>
       </Route>

@@ -41,7 +41,7 @@ export default class Nav extends React.Component {
       myWorksList: _.map(myWorksList, (work)=> {
         return {
           name: work.name,
-          src: "/self/draft/" + work.GUID,
+          src: "/self/myWork/" + work.GUID,
         }
       })
     });
