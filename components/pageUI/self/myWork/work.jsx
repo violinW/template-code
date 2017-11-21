@@ -11,8 +11,9 @@ import reactTools from 'react-tools';
 import Mustache from 'mustache';
 import YAML from 'yamljs';
 import selfAction from 'Action/self.js';
+import commonAction from 'Action/common.js';
 import selfStore from 'Store/self';
-import {Modal, Button, Input} from 'antd';
+import {Modal, Button, Input, Select} from 'antd';
 import {hashHistory} from 'react-router';
 const confirm = Modal.confirm;
 
@@ -20,7 +21,10 @@ export default class MyWork extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      save_type: ''
+      save_type: '',
+      visible: false,
+      default_category_list: [],
+      default_category_no: ''
     };
   }
 
@@ -28,21 +32,31 @@ export default class MyWork extends React.Component {
     selfStore.addChangeListener(this.update);
     this.generateContent();
     setTimeout(()=>this.newParamsArea(), 100);
-    selfAction.getMyWorkById(this.props.params.id)
+    selfAction.getMyWorkById(this.props.params.id);
+    selfAction.getDefaultCategoryList();
   }
 
   componentWillUnmount() {
     selfStore.removeChangeListener(this.update);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.id !== nextProps.params.id) {
+        selfAction.getMyWorkById(nextProps.params.id);
+    }
+  }
+
   update = () => {
     const draftDetail = selfStore.getMyWorkDetailById();
+    const defaultCategoryList = selfStore.getDefaultCategoryList();
     this.setState({
       name: draftDetail.name,
       type: draftDetail.type,
       css: draftDetail.css,
       params: draftDetail.params,
       template: draftDetail.template,
+      default_category_name: draftDetail.defaultCategoryName || "无",
+      default_category_list: defaultCategoryList
     });
     setTimeout(()=>this.newParamsArea(), 100);
   }
@@ -128,16 +142,9 @@ export default class MyWork extends React.Component {
     });
   };
   publicMyWork = ()=> {
-    let self = this;
-    confirm({
-      title: '发布作品提示',
-      content: '你确定发布该作品么?',
-      onOk() {
-        selfAction.publicMyWork(self.props.params.id, ()=> {
-          hashHistory.push('/self/info');
-        });
-      }
-    });
+    this.setState({
+      visible: true
+    })
   }
   cancelMyWork = ()=> {
     let self = this;
@@ -152,9 +159,36 @@ export default class MyWork extends React.Component {
     });
   }
 
+  handleOk = ()=> {
+    if(this.state.default_category_no){
+      selfAction.publicMyWork(this.props.params.id, this.state.default_category_no, ()=>{
+        hashHistory.push('/self/info');
+      });
+    }else{
+      commonAction.sendMessage('请选择发布类型', 'error')
+    }
+  };
+
+  handleCancel = ()=> {
+    this.setState({
+      visible: false,
+      name: ""
+    })
+  };
+
+  handleChange = (value)=> {
+    this.setState({
+      default_category_no: value
+    })
+  };
+
   render() {
     return (
         <div className="MYWORK">
+          <h1 className="work-title">{this.state.name}</h1>
+          {this.state.type == 'public'?
+          <h3 className="work-category">模板类型: {this.state.default_category_name}</h3>
+              : null}
           <div>
             <span className="title title-params">参数：</span>
           </div>
@@ -184,6 +218,22 @@ export default class MyWork extends React.Component {
           <div id="display-area">
           </div>
           <div id="code-area"></div>
+          <Modal
+              title="请选择发布类型"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+          >
+            <Select
+                style={{ width: 400 }}
+                placeholder="发布类型"
+                onChange={this.handleChange}
+            >
+              {_.map(this.state.default_category_list, (item)=>{
+                return <Option value={item.number}>{item.name}</Option>
+              })}
+            </Select>
+          </Modal>
         </div>
     );
   }

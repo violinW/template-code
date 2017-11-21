@@ -1,0 +1,35 @@
+.HOME_PAGE{
+  height: 100%;
+  padding: 15px;
+  .home-head{
+    border-bottom: 5px solid #d4ac76;
+    h1{
+      margin-bottom: 10px;
+      margin-left: 10px;
+      font-size: 24px;
+      color: #3c584d;
+    }
+  }
+  .home-body{
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    border-bottom: 0;
+
+    .group-card{
+      margin: 0 5%;
+      margin-top: 30px;
+      width: 90%;
+      border: 1px solid #c3c3c3;
+      padding: 10px 0;
+
+      h3{
+        font-size: 18px;
+        padding: 5px 0 10px;
+        padding-left: 15px;
+        border-bottom: 1px solid #c3c3c3;
+      }
+    }
+  }
+}

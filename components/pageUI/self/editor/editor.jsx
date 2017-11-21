@@ -274,7 +274,7 @@ export default class Editor extends React.Component {
           </div>
           <div id="code-area"></div>
           <Modal
-              title="请填写标题"
+              title="请填写名称"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}

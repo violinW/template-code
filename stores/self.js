@@ -2,7 +2,7 @@ import Dispatcher from 'Dispatcher';
 import actionConstants from 'Constants';
 import BasicFunc from 'Store/basicStoreFunc';
 
-let draftList = [], draftDetail = {}, myWorksList=[], myWorkDetail={};
+let draftList = [], draftDetail = {}, myWorksList=[], myWorkDetail={}, defaultCategoryList=[];
 
 const selfStore = BasicFunc("个人中心数据", "self", {
   //草稿列表
@@ -20,6 +20,9 @@ const selfStore = BasicFunc("个人中心数据", "self", {
   //我的作品详情
   getMyWorkDetailById() {
     return myWorkDetail;
+  },
+  getDefaultCategoryList(){
+    return defaultCategoryList
   }
 });
 
@@ -37,6 +40,9 @@ Dispatcher.register(function (action) {
       break;
     case actionConstants.self.SELF_MY_WORK_DETAIL:
       myWorkDetail = data;
+      break;
+    case actionConstants.self.DEFAULT_CATEGORY_LIST:
+      defaultCategoryList = data;
       break;
     default:
   }

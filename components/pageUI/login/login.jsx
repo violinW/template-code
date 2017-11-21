@@ -53,7 +53,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="LOGIN" style={{'backgroundImage': `url(${Images.loginBackground})`}}>
-                <h2>粉刷匠模板网</h2>
+                <h2>画板之家</h2>
                 <div className="login-block">
                     <div className="login-row">
                         <Input placeholder="用户名" onChange={(e) => this.setField('username', e.target.value)}/>

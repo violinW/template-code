@@ -24,6 +24,8 @@ import Info from 'Component/pageUI/self/info/info';
 import Editor from 'Component/pageUI/self/editor/editor';
 //作品
 import MyWork from 'Component/pageUI/self/myWork/work';
+//首页
+import HomePage from 'Component/pageUI/public/home/homePage';
 
 module.exports = (
     <Router history={hashHistory}>
@@ -40,6 +42,7 @@ module.exports = (
           <Route path='myWork/edit/:id' component={MyWork}/>
           <Route path='info' component={Info}/>
         </Route>
+        <Route path='/home' component={HomePage}/>
       </Route>
     </Router>
 );

@@ -6,7 +6,9 @@ const self = {
   //我的作品列表
   SELF_MY_WORKS_LIST: null,
   //我的作品详情
-  SELF_MY_WORK_DETAIL: null
+  SELF_MY_WORK_DETAIL: null,
+  //默认类别列表
+  DEFAULT_CATEGORY_LIST: null
 };
 
 module.exports = self;
