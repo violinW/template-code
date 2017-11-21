@@ -10,15 +10,16 @@ import './work.scss';
 import reactTools from 'react-tools';
 import Mustache from 'mustache';
 import YAML from 'yamljs';
+import selfAction from 'Action/self.js';
 import selfStore from 'Store/self';
 import {Modal, Button, Input} from 'antd';
+import {hashHistory} from 'react-router';
 const confirm = Modal.confirm;
 
 export default class MyWork extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      params: !this.props.params.id && defaultParams,
       save_type: ''
     };
   }
@@ -27,6 +28,7 @@ export default class MyWork extends React.Component {
     selfStore.addChangeListener(this.update);
     this.generateContent();
     setTimeout(()=>this.newParamsArea(), 100);
+    selfAction.getMyWorkById(this.props.params.id)
   }
 
   componentWillUnmount() {
@@ -34,9 +36,13 @@ export default class MyWork extends React.Component {
   }
 
   update = () => {
-    const draftDetail = "";
+    const draftDetail = selfStore.getMyWorkDetailById();
     this.setState({
-      params: draftDetail.params
+      name: draftDetail.name,
+      type: draftDetail.type,
+      css: draftDetail.css,
+      params: draftDetail.params,
+      template: draftDetail.template,
     });
     setTimeout(()=>this.newParamsArea(), 100);
   }
@@ -114,11 +120,37 @@ export default class MyWork extends React.Component {
       title: '删除提示',
       content: '你确定删除该作品么?',
       onOk() {
-
+        selfAction.deleteMyWorkById(self.props.params.id, ()=> {
+          selfAction.getMyWorksList();
+          hashHistory.push('/self/info');
+        });
       }
     });
   };
-
+  publicMyWork = ()=> {
+    let self = this;
+    confirm({
+      title: '发布作品提示',
+      content: '你确定发布该作品么?',
+      onOk() {
+        selfAction.publicMyWork(self.props.params.id, ()=> {
+          hashHistory.push('/self/info');
+        });
+      }
+    });
+  }
+  cancelMyWork = ()=> {
+    let self = this;
+    confirm({
+      title: '取消发布提示',
+      content: '你确定取消发布该作品么?',
+      onOk() {
+        selfAction.cancelMyWork(self.props.params.id, ()=> {
+          hashHistory.push('/self/info');
+        });
+      }
+    });
+  }
 
   render() {
     return (
@@ -134,9 +166,18 @@ export default class MyWork extends React.Component {
           <Button onClick={this.generateResult}>
             测试
           </Button>
+          {this.state.type == 'private'?
           <Button onClick={this.editMyWork}>
             修改
-          </Button>
+          </Button>: null}
+          {this.state.type == 'private'?
+              (<Button onClick={this.publicMyWork}>
+            发布
+          </Button>)
+              :(<Button onClick={this.cancelMyWork}>
+            取消发布
+          </Button>)
+              }
           <Button onClick={this.deleteMyWork}>
             删除
           </Button>

@@ -37,6 +37,7 @@ module.exports = (
           <Route path='draft/:id' component={Editor}/>
           <Route path='myWork' component={MyWork}/>
           <Route path='myWork/:id' component={MyWork}/>
+          <Route path='myWork/edit/:id' component={MyWork}/>
           <Route path='info' component={Info}/>
         </Route>
       </Route>
