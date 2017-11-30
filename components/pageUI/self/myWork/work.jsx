@@ -24,7 +24,8 @@ export default class MyWork extends React.Component {
       save_type: '',
       visible: false,
       default_category_list: [],
-      default_category_no: ''
+      default_category_no: '',
+      referenceList: []
     };
   }
 
@@ -49,16 +50,19 @@ export default class MyWork extends React.Component {
   update = () => {
     const draftDetail = selfStore.getMyWorkDetailById();
     const defaultCategoryList = selfStore.getDefaultCategoryList();
+    let referenceList = JSON.parse(draftDetail.reference);
     this.setState({
       name: draftDetail.name,
       type: draftDetail.type,
       css: draftDetail.css,
       params: draftDetail.params,
       template: draftDetail.template,
+      referenceList,
       default_category_name: draftDetail.defaultCategoryName || "无",
       default_category_list: defaultCategoryList
     });
     setTimeout(()=>this.newParamsArea(), 100);
+    setTimeout(()=>this.generateContent(), 200);
   }
 
   updateParams = (newParams)=> {
@@ -114,11 +118,15 @@ export default class MyWork extends React.Component {
   generateContent = ()=> {
     $('#display-area').html('<iframe id="dispFrame" />');
     let idocument = $('iframe').prop('contentDocument');
-    let srcList = ["//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js",
-      "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js",
-      "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"]
+    let srcList = [
+      //   "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js",
+      // "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js",
+      "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"];
 
-    _.each(srcList, item=> {
+    let importReference = this.state.referenceList;
+    let finalList = srcList.concat(importReference);
+
+    _.each(finalList, item=> {
       let sc = document.createElement("script");
       sc.setAttribute("src", item);
       sc.setAttribute("type", "text/javascript");

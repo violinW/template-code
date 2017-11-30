@@ -28,7 +28,9 @@ export default class Editor extends React.Component {
       template: !this.props.params.id && defaultTemplate,
       css: !this.props.params.id && defaultCss,
       visible: false,
-      save_type: ''
+      importVisible: false,
+      save_type: '',
+      referenceList: []
     };
   }
 
@@ -57,15 +59,18 @@ export default class Editor extends React.Component {
 
   update = () => {
     const draftDetail = selfStore.getDraftDetail() || {};
+    let referenceList = JSON.parse(draftDetail.reference);
     this.setState({
       name: draftDetail.name,
       params: draftDetail.params,
       template: draftDetail.template,
       css: draftDetail.css,
+      referenceList
     });
     setTimeout(()=>this.newParamsArea(), 100);
     setTimeout(()=>this.newTemplateArea(), 200);
     setTimeout(()=>this.newCssArea(), 300);
+    setTimeout(()=>this.generateContent(), 400);
   }
 
   init = ()=> {
@@ -165,11 +170,14 @@ export default class Editor extends React.Component {
   generateContent = ()=> {
     $('#display-area').html('<iframe id="dispFrame" />');
     let idocument = $('iframe').prop('contentDocument');
-    let srcList = ["//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js",
-      "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js",
+    let srcList = [
+      //   "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js",
+      // "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js",
       "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"]
 
-    _.each(srcList, item=> {
+    let importReference = this.state.referenceList;
+    let finalList = srcList.concat(importReference);
+    _.each(finalList, item=> {
       let sc = document.createElement("script");
       sc.setAttribute("src", item);
       sc.setAttribute("type", "text/javascript");
@@ -213,17 +221,19 @@ export default class Editor extends React.Component {
         name: this.state.name,
         params: this.state.params,
         css: this.state.css,
+        reference: JSON.stringify(this.state.referenceList),
         template: this.state.template
       }, this.props.params.id, ()=> {
         selfAction.getDraftList();
         hashHistory.push('/self/info');
       })
 
-    }else if(this.state.save_type === "work"){
+    } else if (this.state.save_type === "work") {
       selfAction.saveMyWork({
         name: this.state.name,
         params: this.state.params,
         css: this.state.css,
+        reference: JSON.stringify(this.state.referenceList),
         template: this.state.template
       }, null, ()=> {
         selfAction.getMyWorksList();
@@ -235,6 +245,7 @@ export default class Editor extends React.Component {
   handleCancel = ()=> {
     this.setState({
       visible: false,
+      importVisible: false,
       name: ""
     })
   };
@@ -243,6 +254,35 @@ export default class Editor extends React.Component {
     this.setState({
       name: e.target.value
     })
+  };
+
+  importManagement = ()=> {
+    this.setState({
+      importVisible: true
+    })
+  };
+
+  addReference = ()=> {
+    let reference = $('#reference-input').val();
+    let referenceList = this.state.referenceList;
+    referenceList.push(reference);
+    this.setState({
+      referenceList
+    });
+    $('#reference-input').val('');
+  };
+  deleteReference = (reference)=> {
+    let referenceList = this.state.referenceList;
+    _.remove(referenceList, (chr)=> {
+      return chr === reference;
+    });
+    this.setState({
+      referenceList
+    });
+  };
+  importReference = ()=> {
+    this.handleCancel();
+    this.generateContent();
   };
 
   render() {
@@ -258,6 +298,7 @@ export default class Editor extends React.Component {
             <div id="template-area"></div>
             <div id="css-area"></div>
           </div>
+          <div><Button onClick={this.importManagement}>引用管理</Button></div>
           <Button onClick={this.generateResult}>
             测试
           </Button>
@@ -273,6 +314,28 @@ export default class Editor extends React.Component {
           <div id="display-area">
           </div>
           <div id="code-area"></div>
+          <Modal
+              title="引用管理"
+              visible={this.state.importVisible}
+              onOk={this.importReference}
+              onCancel={this.handleCancel}
+          >
+            <Input id="reference-input" style={{width: 380, marginRight: "20px"}}
+                   placeholder="请输入有效链接,如://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"/>
+            <Button onClick={this.addReference}>
+              添加引用
+            </Button>
+            <div className="reference-list" style={{margin: "10px 0 10px 20px"}}>
+              {_.map(this.state.referenceList, (reference)=> {
+                return <h3 className="reference-item">{reference}
+                  <Button style={{padding: "0", border: "none", marginLeft: "5px", height: "15px", color: "red"}}
+                          onClick={()=>this.deleteReference(reference)}>
+                    <icon className="fa fa-close"></icon>
+                  </Button>
+                </h3>
+              })}
+            </div>
+          </Modal>
           <Modal
               title="请填写名称"
               visible={this.state.visible}
