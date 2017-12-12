@@ -1,16 +1,30 @@
 import React from 'react';
 import './homePage.scss';
-import {Input, Button} from 'antd';
-import Images from 'Images';
+import publicAction from 'Action/public.js';
+import publicStore from 'Store/public';
 
 export default class HomeFage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupList: [{
-        name: 'List'
-      }]
+      groupList: []
     };
+  }
+
+  componentDidMount() {
+    publicStore.addChangeListener(this.update);
+    publicAction.getHomepageWorkList();
+  }
+
+  componentWillUnmount() {
+    publicStore.removeChangeListener(this.update);
+  }
+
+  update = () => {
+    const homepageWorkList = publicStore.getHomepageWorkList();
+    this.setState({
+      groupList: homepageWorkList
+    });
   }
 
   render() {

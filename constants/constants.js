@@ -1,5 +1,6 @@
 import keyMirror from 'keymirror';
 import self from './self';
+import publicList from './public';
 
 const common = {
     //普适方法
@@ -14,4 +15,5 @@ const common = {
 module.exports = {
     common: keyMirror(common),
     self: keyMirror(self),
+    public: keyMirror(publicList)
 };

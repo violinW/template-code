@@ -6,35 +6,34 @@ import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/css/css';
 import 'codemirror/lib/codemirror.css';
-import './work.scss';
+import './workEditor.scss';
 import reactTools from 'react-tools';
 import Mustache from 'mustache';
 import YAML from 'yamljs';
 import selfAction from 'Action/self.js';
-import commonAction from 'Action/common.js';
 import selfStore from 'Store/self';
-import {Modal, Button, Input, Select} from 'antd';
+import {Modal, Button, Input} from 'antd';
 import {hashHistory} from 'react-router';
 const confirm = Modal.confirm;
 
-export default class MyWork extends React.Component {
+export default class WorkEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      save_type: '',
+      name: '',
+      params: !this.props.params.id,
+      template: !this.props.params.id,
+      css: !this.props.params.id,
       visible: false,
-      default_category_list: [],
-      default_category_no: '',
+      importVisible: false,
+      save_type: '',
       referenceList: []
     };
   }
 
   componentDidMount() {
     selfStore.addChangeListener(this.update);
-    this.generateContent();
-    setTimeout(()=>this.newParamsArea(), 100);
-    selfAction.getMyWorkById(this.props.params.id);
-    selfAction.getDefaultCategoryList();
+    this.init();
   }
 
   componentWillUnmount() {
@@ -43,7 +42,15 @@ export default class MyWork extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.params.id !== nextProps.params.id) {
-      selfAction.getMyWorkById(nextProps.params.id);
+      if (!this.props.params.id) {
+        this.state = {
+          params: defaultParams,
+          template: defaultTemplate,
+          css: defaultCss
+        };
+      } else {
+        selfAction.getDraftDetail(this.props.params.id);
+      }
     }
   }
 
@@ -62,12 +69,36 @@ export default class MyWork extends React.Component {
       default_category_list: defaultCategoryList
     });
     setTimeout(()=>this.newParamsArea(), 100);
-    setTimeout(()=>this.generateContent(), 200);
+    setTimeout(()=>this.newTemplateArea(), 200);
+    setTimeout(()=>this.newCssArea(), 300);
+    setTimeout(()=>this.generateContent(), 400);
   }
 
-  updateParams = (newParams)=> {
+  init = ()=> {
+    //生成默认参数
+    setTimeout(()=>this.newParamsArea(), 100);
+    setTimeout(()=>this.newTemplateArea(), 200);
+    setTimeout(()=>this.newCssArea(), 300);
+    this.generateContent();
+    selfAction.getMyWorkById(this.props.params.id);
+
+  }
+
+  updateCode = (newParams)=> {
     this.setState({
       params: newParams
+    });
+  };
+
+  updateTemplate = (newTemplate)=> {
+    this.setState({
+      template: newTemplate
+    });
+  };
+
+  updateCss = (newCss)=> {
+    this.setState({
+      css: newCss
     });
   };
 
@@ -78,8 +109,30 @@ export default class MyWork extends React.Component {
       smartIndent: false
     };
     $('#params-area').html('');
-    ReactDom.render(<CodeMirror value={this.state.params} onChange={this.updateParams} options={paramsOptions}/>,
+    ReactDom.render(<CodeMirror value={this.state.params} onChange={this.updateCode} options={paramsOptions}/>,
         $('#params-area')[0]);
+  };
+
+  newTemplateArea = ()=> {
+    var templateOptions = {
+      lineNumbers: true,
+      mode: 'javascript',
+      smartIndent: false
+    };
+    $('#template-area').html('');
+    ReactDom.render(<CodeMirror value={this.state.template} onChange={this.updateTemplate} options={templateOptions}/>,
+        $('#template-area')[0]);
+  };
+
+  newCssArea = ()=> {
+    var cssOptions = {
+      lineNumbers: true,
+      mode: 'css',
+      smartIndent: false
+    };
+    $('#css-area').html('');
+    ReactDom.render(<CodeMirror value={this.state.css} onChange={this.updateCss} options={cssOptions}/>,
+        $('#css-area')[0]);
   };
 
   generateResult = ()=> {
@@ -121,11 +174,10 @@ export default class MyWork extends React.Component {
     let srcList = [
       //   "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js",
       // "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js",
-      "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"];
+      "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"]
 
     let importReference = this.state.referenceList;
     let finalList = srcList.concat(importReference);
-
     _.each(finalList, item=> {
       let sc = document.createElement("script");
       sc.setAttribute("src", item);
@@ -136,85 +188,52 @@ export default class MyWork extends React.Component {
     idocument.body.appendChild($('<div id="content"></div>')[0]);
   };
 
-  deleteMyWork = ()=> {
+  saveAsWork = ()=> {
+    this.setState({
+      visible: true,
+      save_type: 'work'
+    })
+  };
+
+  deleteDraft = ()=> {
     let self = this;
     confirm({
       title: '删除提示',
-      content: '你确定删除该作品么?',
+      content: '你确定删除该草稿么?',
       onOk() {
-        selfAction.deleteMyWorkById(self.props.params.id, ()=> {
-          selfAction.getMyWorksList();
+        selfAction.deleteDraftById(self.props.params.id, ()=> {
+          selfAction.getDraftList();
           hashHistory.push('/self/info');
         });
       }
     });
   };
-  publicMyWork = ()=> {
-    this.setState({
-      visible: true
-    })
-  }
-  cancelMyWork = ()=> {
-    let self = this;
-    confirm({
-      title: '取消发布提示',
-      content: '你确定取消发布该作品么?',
-      onOk() {
-        selfAction.cancelMyWork(self.props.params.id, ()=> {
-          selfAction.getMyWorkById(self.props.params.id);
-        });
-      }
-    });
-  }
 
   handleOk = ()=> {
-    if (this.state.default_category_no) {
-      let self = this;
-      selfAction.publicMyWork(this.props.params.id, this.state.default_category_no, ()=> {
-        self.handleCancel();
-        selfAction.getMyWorkById(self.props.params.id);
-      });
-    } else {
-      commonAction.sendMessage('请选择发布类型', 'error')
-    }
+    selfAction.saveMyWork({
+      name: this.state.name,
+      params: this.state.params,
+      css: this.state.css,
+      reference: JSON.stringify(this.state.referenceList),
+      template: this.state.template
+    }, this.props.params.id, ()=> {
+      selfAction.getMyWorksList();
+      hashHistory.push('/self/myWork/' + this.props.params.id);
+    })
   };
 
   handleCancel = ()=> {
     this.setState({
       visible: false,
-      name: ""
+      importVisible: false
     })
   };
 
-  handleChange = (value)=> {
+  onNameChange = (e)=> {
     this.setState({
-      default_category_no: value
+      name: e.target.value
     })
   };
-
-  editMyWork = ()=> {
-    hashHistory.push('/self/work/edit/' + this.props.params.id);
-  };
-
-  buttonList = (type)=> {
-    if (type == "private") {
-      return <span>
-         <Button onClick={this.editMyWork}>
-            修改
-          </Button>
-        <Button onClick={this.publicMyWork}>
-            发布
-          </Button>
-          <Button onClick={this.deleteMyWork}>
-            删除
-          </Button>
-      </span>
-    }else{
-      return <Button onClick={this.cancelMyWork}>
-        取消发布
-      </Button>
-    }
-  }
 
   importManagement = ()=> {
     this.setState({
@@ -222,62 +241,72 @@ export default class MyWork extends React.Component {
     })
   };
 
-  handleCancelImport = ()=> {
+  addReference = ()=> {
+    let reference = $('#reference-input').val();
+    let referenceList = this.state.referenceList;
+    referenceList.push(reference);
     this.setState({
-      importVisible: false,
-    })
+      referenceList
+    });
+    $('#reference-input').val('');
   };
-
+  importReference = ()=> {
+    this.handleCancel();
+    this.generateContent();
+  };
 
   render() {
     return (
-        <div className="MYWORK">
-          <h1 className="work-title">{this.state.name}</h1>
-          {this.state.type == 'public' ?
-              <h3 className="work-category">模板类型: {this.state.default_category_name}</h3>
-              : null}
+        <div className="WORK-EDITOR">
           <div>
             <span className="title title-params">参数：</span>
+            <span className="title title-template">模板：</span>
+            <span className="title title-css">样式（css）：</span>
           </div>
           <div className="edit-area">
             <div id="params-area"></div>
+            <div id="template-area"></div>
+            <div id="css-area"></div>
           </div>
-          <div><Button onClick={this.importManagement}>引用列表</Button></div>
+          <div><Button onClick={this.importManagement}>引用管理</Button></div>
           <Button onClick={this.generateResult}>
             测试
           </Button>
-          {/myWork/.test(window.location.href) && this.buttonList(this.state.type)}
+          <Button onClick={this.saveAsWork}>
+            保存
+          </Button>
           <div id="display-area">
           </div>
           <div id="code-area"></div>
           <Modal
-              title="引用列表"
+              title="引用管理"
               visible={this.state.importVisible}
-              onCancel={this.handleCancelImport}
-              footer={null}
+              onOk={this.importReference}
+              onCancel={this.handleCancel}
           >
+            <Input id="reference-input" style={{width: 380, marginRight: "20px"}}
+                   placeholder="请输入有效链接,如://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"/>
+            <Button onClick={this.addReference}>
+              添加引用
+            </Button>
             <div className="reference-list" style={{margin: "10px 0 10px 20px"}}>
               {_.map(this.state.referenceList, (reference)=> {
                 return <h3 className="reference-item">{reference}
+                  <Button style={{padding: "0", border: "none", marginLeft: "5px", height: "15px", color: "red"}}
+                          onClick={()=>this.deleteReference(reference)}>
+                    <icon className="fa fa-close"></icon>
+                  </Button>
                 </h3>
               })}
             </div>
           </Modal>
           <Modal
-              title="请选择发布类型"
+              title="请填写名称"
               visible={this.state.visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
           >
-            <Select
-                style={{width: 400}}
-                placeholder="发布类型"
-                onChange={this.handleChange}
-            >
-              {_.map(this.state.default_category_list, (item)=> {
-                return <Option value={item.number}>{item.name}</Option>
-              })}
-            </Select>
+            <Input value={this.state.name} onChange={this.onNameChange}/>
           </Modal>
         </div>
     );

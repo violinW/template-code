@@ -21,8 +21,8 @@ export default class Login extends React.Component {
         <div className="SELF">
           <div className="user-info">
             <img className="header-img" src={"." + Images.userHead} alt=""/>
-            <h3>violin</h3>
-            <p>我是一个粉刷匠,粉刷本领强!</p>
+            <h3>画板之家</h3>
+            <p>人人都是粉刷匠,粉刷本领强!</p>
           </div>
           <div className="user-content">
             <Nav />

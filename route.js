@@ -14,7 +14,7 @@ import {Router, Route, IndexRoute, Redirect, hashHistory} from 'react-router';
 import Login from 'Component/pageUI/login/login';
 //找回密码
 import Forgot from 'Component/pageUI/forgot/forgot';
-//个人中心
+//全局UI
 import Body from 'Component/pageUI/body/body';
 //个人中心
 import Self from 'Component/pageUI/self/self';
@@ -24,6 +24,8 @@ import Info from 'Component/pageUI/self/info/info';
 import Editor from 'Component/pageUI/self/editor/editor';
 //作品
 import MyWork from 'Component/pageUI/self/myWork/work';
+//作品
+import workEditor from 'Component/pageUI/self/workEditor/workEditor';
 //首页
 import HomePage from 'Component/pageUI/public/home/homePage';
 
@@ -39,8 +41,11 @@ module.exports = (
           <Route path='draft/:id' component={Editor}/>
           <Route path='myWork' component={MyWork}/>
           <Route path='myWork/:id' component={MyWork}/>
-          <Route path='myWork/edit/:id' component={MyWork}/>
+          <Route path='work/edit/:id' component={workEditor}/>
           <Route path='info' component={Info}/>
+        </Route>
+        <Route path='/public' component={Self}>
+          <Route path='work/:id' component={MyWork}/>
         </Route>
         <Route path='/home' component={HomePage}/>
       </Route>
