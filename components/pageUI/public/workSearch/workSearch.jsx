@@ -7,12 +7,16 @@ import YAML from 'yamljs';
 import reactTools from 'react-tools';
 import {hashHistory} from 'react-router';
 import Search from 'Component/basicUI/search/search.jsx';
+import {Pagination} from 'antd';
 
 export default class WorkSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: []
+      list: [],
+      currentPage: 1,
+      total: 0,
+      pageSize: 20
     };
   }
 
@@ -86,6 +90,10 @@ export default class WorkSearch extends React.Component {
     hashHistory.push(`/public/workSearch/${keywords || "BLACK_NULL"}${this.props.params.number ? '/' + this.props.params.number : ''}`);
   };
 
+  onPageChange = (page, pageSize)=> {
+    publicAction.getSearchWorkList(this.props.params.number, this.props.params.keywords == "BLACK_NULL" ? "" : this.props.params.keywords, pageSize, page);
+  };
+
   render() {
     return (
         <div className="WORK_SEARCH">
@@ -94,8 +102,7 @@ export default class WorkSearch extends React.Component {
           </div>
           <div className="work-search-body">
             <Search keywords={this.props.params.keywords}
-                    search={this.search}
-                    value={this.props.params.keywords}></Search>
+                    search={this.search}></Search>
             <ul className="group-body">
               {
                 _.map(this.state.list, (item)=> {
@@ -103,6 +110,7 @@ export default class WorkSearch extends React.Component {
                 })
               }
             </ul>
+            <Pagination current={this.state.currentPage} total={this.state.total} pageSize={this.state.pageSize} onChange={this.onPageChange}/>
           </div>
         </div>
     );

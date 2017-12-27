@@ -36,7 +36,7 @@ import WorkSearch from 'Component/pageUI/public/workSearch/workSearch';
 module.exports = (
     <Router history={hashHistory}>
       <Route component={Body}>
-        <Redirect from='/' to='/self'/>
+        <Redirect from='/' to='/public/home'/>
         <Route path='/login' component={Login}/>
         <Route path='/forgot' component={Forgot}/>
         <Redirect from='/self' to='/self/info'/>
@@ -49,12 +49,12 @@ module.exports = (
           <Route path='info' component={Info}/>
         </Route>
         <Route path='/public' component={Public}>
+          <Route path='home' component={HomePage}/>
           <Route path='work/:id' component={MyWork}/>
           <Route path='workSearch/:keywords' component={WorkSearch}/>
           <Route path='workSearch/:keywords/:number' component={WorkSearch}/>
 
         </Route>
-        <Route path='/home' component={HomePage}/>
       </Route>
     </Router>
 );

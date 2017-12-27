@@ -6,6 +6,7 @@ import Mustache from 'mustache';
 import YAML from 'yamljs';
 import reactTools from 'react-tools';
 import {hashHistory} from 'react-router';
+import Search from 'Component/basicUI/search/search.jsx';
 
 export default class HomeFage extends React.Component {
   constructor(props) {
@@ -83,12 +84,18 @@ export default class HomeFage extends React.Component {
     hashHistory.push('/public/workSearch/BLACK_NULL/' + number);
   };
 
+  search = (keywords)=> {
+    hashHistory.push(`/public/workSearch/${keywords || "BLACK_NULL"}`);
+  };
+
+
   render() {
     return (
         <div className="HOME_PAGE">
           <div className="home-head">
             <h1>画板之家</h1>
           </div>
+          <Search search={this.search}></Search>
           <div className="home-body">
             {
               _.map(this.state.groupList, (group)=> {
