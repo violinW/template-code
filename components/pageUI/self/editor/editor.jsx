@@ -173,7 +173,8 @@ export default class Editor extends React.Component {
     let srcList = [
       //   "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js",
       // "//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js",
-      "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"]
+      //"//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"
+    ]
 
     let importReference = this.state.referenceList;
     let finalList = srcList.concat(importReference);

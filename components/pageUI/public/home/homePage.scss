@@ -1,34 +1,73 @@
-.HOME_PAGE{
+.HOME_PAGE {
   height: 100%;
-  padding: 15px;
-  .home-head{
+  padding: 15px 0;
+  .home-head {
     border-bottom: 5px solid #d4ac76;
-    h1{
+    h1 {
       margin-bottom: 10px;
       margin-left: 10px;
       font-size: 24px;
       color: #3c584d;
     }
   }
-  .home-body{
+  .home-body {
     position: absolute;
     top: 60px;
     left: 0;
     right: 0;
     border-bottom: 0;
 
-    .group-card{
+    .group-card {
+      position: relative;
       margin: 0 5%;
       margin-top: 30px;
       width: 90%;
       border: 1px solid #c3c3c3;
       padding: 10px 0;
 
-      h3{
+      h3 {
         font-size: 18px;
         padding: 5px 0 10px;
         padding-left: 15px;
         border-bottom: 1px solid #c3c3c3;
+
+        .more-work {
+          position: absolute;
+          right: 20px;
+          top: 15px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+
+      .group-body {
+        li {
+          position: relative;
+          display: inline-block;
+          width: 350px;
+          margin: 10px 0 0 10px;
+          border: 1px solid #ddd;
+          iframe {
+            border: none;
+          }
+          .cover-desc {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: #dddddd73;
+            cursor: pointer;
+            p {
+              position: absolute;
+              left: 10px;
+              bottom: 10px;
+              font-size: 14px;
+              font-weight: bold;
+            }
+          }
+        }
       }
     }
   }

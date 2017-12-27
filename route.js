@@ -26,8 +26,12 @@ import Editor from 'Component/pageUI/self/editor/editor';
 import MyWork from 'Component/pageUI/self/myWork/work';
 //作品
 import workEditor from 'Component/pageUI/self/workEditor/workEditor';
+//公共页面
+import Public from 'Component/pageUI/public/public';
 //首页
 import HomePage from 'Component/pageUI/public/home/homePage';
+//首页
+import WorkSearch from 'Component/pageUI/public/workSearch/workSearch';
 
 module.exports = (
     <Router history={hashHistory}>
@@ -44,8 +48,11 @@ module.exports = (
           <Route path='work/edit/:id' component={workEditor}/>
           <Route path='info' component={Info}/>
         </Route>
-        <Route path='/public' component={Self}>
+        <Route path='/public' component={Public}>
           <Route path='work/:id' component={MyWork}/>
+          <Route path='workSearch/:keywords' component={WorkSearch}/>
+          <Route path='workSearch/:keywords/:number' component={WorkSearch}/>
+
         </Route>
         <Route path='/home' component={HomePage}/>
       </Route>
