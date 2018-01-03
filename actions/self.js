@@ -52,7 +52,7 @@ module.exports = {
     })
   },
   getMyWorkById(id){
-    RequestResultHandler(`/works/myWorks/detail/${id}`, 'GET', null, function (result, status, xhr) {
+    RequestResultHandler(`/public/myWorks/detail/${id}`, 'GET', null, function (result, status, xhr) {
       Dispatcher.dispatch(new Action(constants.self.SELF_MY_WORK_DETAIL, result));
     }, function (xhr, status, error) {
       Dispatcher.dispatch(new Action(constants.common.TOAST_TO_USER, new Msg('', '获取我的作品详情失败', 'error', 'message', '')));

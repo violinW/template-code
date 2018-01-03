@@ -1,15 +1,14 @@
 import React from 'react';
-import './workSearch.scss';
+import './AuthorColunm.scss';
 import publicAction from 'Action/public.js';
 import publicStore from 'Store/public';
 import Mustache from 'mustache';
 import YAML from 'yamljs';
 import reactTools from 'react-tools';
 import {hashHistory} from 'react-router';
-import Search from 'Component/basicUI/search/search.jsx';
 import {Pagination} from 'antd';
 
-export default class WorkSearch extends React.Component {
+export default class AuthorColunm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -86,10 +85,6 @@ export default class WorkSearch extends React.Component {
     </li>
   };
 
-  search = (keywords)=> {
-    hashHistory.push(`/public/workSearch/${keywords || "BLACK_NULL"}${this.props.params.number ? '/' + this.props.params.number : ''}`);
-  };
-
   onPageChange = (page, pageSize)=> {
     let stateData = {
       currentPage: page,
@@ -104,23 +99,14 @@ export default class WorkSearch extends React.Component {
 
   render() {
     return (
-        <div className="WORK_SEARCH">
+        <div className="AUTHOR_COLUNM">
           <div className="home-head">
             <h1>画板之家</h1>
           </div>
           <div className="work-search-body">
-            <Search keywords={this.props.params.keywords}
-                    search={this.search}></Search>
-            <ul className="group-body">
-              {
-                _.map(this.state.list, (item)=> {
-                  return this.makeItem(item)
-                })
-              }
-            </ul>
-            <Pagination current={this.state.currentPage} total={this.state.total} pageSize={this.state.pageSize}
-                        onChange={this.onPageChange}/>
+            <div></div>
           </div>
+
         </div>
     );
   }

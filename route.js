@@ -30,8 +30,10 @@ import workEditor from 'Component/pageUI/self/workEditor/workEditor';
 import Public from 'Component/pageUI/public/public';
 //首页
 import HomePage from 'Component/pageUI/public/home/homePage';
-//首页
+//作品搜索
 import WorkSearch from 'Component/pageUI/public/workSearch/workSearch';
+//作者专栏
+import AuthorColunm from 'Component/pageUI/public/authorColunm/AuthorColunm';
 
 module.exports = (
     <Router history={hashHistory}>
@@ -53,6 +55,7 @@ module.exports = (
           <Route path='work/:id' component={MyWork}/>
           <Route path='workSearch/:keywords' component={WorkSearch}/>
           <Route path='workSearch/:keywords/:number' component={WorkSearch}/>
+          <Route path='author/:authorId' component={AuthorColunm}/>
 
         </Route>
       </Route>
