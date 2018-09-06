@@ -179,11 +179,18 @@ export default class Editor extends React.Component {
     let importReference = this.state.referenceList;
     let finalList = srcList.concat(importReference);
     _.each(finalList, item=> {
-      let sc = document.createElement("script");
-      sc.setAttribute("src", item);
-      sc.setAttribute("type", "text/javascript");
-      idocument.body.appendChild(sc);
+      if (/[\S]+\.js$/.test(item)) {
+        let sc = document.createElement("script");
+        sc.setAttribute("src", item);
+        sc.setAttribute("type", "text/javascript");
+        idocument.body.appendChild(sc);
 
+      } else if (/[\S]+\.css$/.test(item)) {
+        let lk = document.createElement("link");
+        lk.setAttribute("href", item);
+        lk.setAttribute("rel", "stylesheet");
+        idocument.body.appendChild(lk);
+      }
     })
     idocument.body.appendChild($('<div id="content"></div>')[0]);
   };
