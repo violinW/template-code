@@ -21,7 +21,7 @@ export default class AuthorColunm extends React.Component {
 
   componentDidMount() {
     publicStore.addChangeListener(this.update);
-    publicAction.getSearchWorkList(this.props.params.number, this.props.params.keywords == "BLACK_NULL" ? "" : this.props.params.keywords);
+    publicAction.getAuthorWorkList(this.props.params.authorId);
   }
 
   componentWillUnmount() {
@@ -29,15 +29,15 @@ export default class AuthorColunm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.params.keywords !== nextProps.params.keywords || this.props.params.number !== nextProps.params.number) {
-      publicAction.getSearchWorkList(nextProps.params.number, nextProps.params.keywords == "BLACK_NULL" ? "" : nextProps.params.keywords);
+    if (this.props.params.authorId !== nextProps.params.authorId) {
+      publicAction.getAuthorWorkList(nextProps.params.authorId);
     }
   }
 
   update = () => {
-    const searchWorkList = publicStore.getSearchWorkList();
+    const authorWorkList = publicStore.getAuthorWorkList();
     this.setState({
-      list: searchWorkList
+      list: authorWorkList
     });
   };
 
@@ -104,9 +104,17 @@ export default class AuthorColunm extends React.Component {
             <h1>画板之家</h1>
           </div>
           <div className="work-search-body">
-            <div></div>
+            <div>
+              <h3>{this.state.name}</h3>
+              <div>
+                {
+                  _.map(this.state.list, (item)=> {
+                    return this.makeItem(item)
+                  })
+                }
+              </div>
+            </div>
           </div>
-
         </div>
     );
   }
